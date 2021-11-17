@@ -12,4 +12,4 @@
 `sudo apt-get install python3.6`
 
 测试结果<br>
-![这是图片](result2.png "RESULT2")
+![image](https://github.com/lxyang1115/lex_analysis/blob/master/result2.png "RESULT2")
