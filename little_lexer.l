@@ -23,7 +23,7 @@ WORDS       [^ \t\n]+
 %%
 {BLANK}     { if (cnt) numChars += yyleng, cnt = 0; REJECT; }
 {WORDS}     { if (!cnt) { numChars += yyleng, numWords++, cnt = 1; if (numLines == 0 && comment) printf("%s\n",yytext);} REJECT; }
-^#   { if (numLines == 0 && !comment) printf("#name "); comment = 1; }
+#   { if (numLines == 0 && !comment) printf("#name "); comment = 1; }
 \n  { numLines++; comment = 0; }
 {FUNCTION}  { if (!comment) func = 1; }
 {NUMBER}    { if (!comment) printf("#%d CONST %s\n", numLines, yytext); }
