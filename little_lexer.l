@@ -1,5 +1,10 @@
 %{
 #include <string.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
 int numChars = 0, numWords = 0, numLines = 0;
 int comment = 0, cnt = 0, func = 0;
 %}
@@ -16,9 +21,9 @@ BLANK       [ \t\n]+
 WORDS       [^ \t\n]+
 
 %%
-{BLANK}     { if (cnt) { numChars += yyleng, cnt = 0;} REJECT; }
-{WORDS}     { if (!cnt) { numChars += yyleng, numWords++, cnt = 1;} REJECT; }
-#   { comment = 1; }
+{BLANK}     { if (cnt) numChars += yyleng, cnt = 0; REJECT; }
+{WORDS}     { if (!cnt) { numChars += yyleng, numWords++, cnt = 1; if (numLines == 0 && comment) printf("%s\n",yytext);} REJECT; }
+^#   { if (numLines == 0 && !comment) printf("#name "); comment = 1; }
 \n  { numLines++; comment = 0; }
 {FUNCTION}  { if (!comment) func = 1; }
 {NUMBER}    { if (!comment) printf("#%d CONST %s\n", numLines, yytext); }
